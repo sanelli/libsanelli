@@ -3,3 +3,4 @@ target_sources(sanelli
         sanelli.hpp
 )
 
+add_subdirectory(tree)
