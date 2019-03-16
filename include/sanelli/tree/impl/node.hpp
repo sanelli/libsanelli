@@ -14,9 +14,10 @@ class node
  private:
    std::vector<std::shared_ptr<node<TValue>>> _children;
    TValue value;
+   bool value_set;
 
-   node() {}
-   node(TValue value)
+   node() : value_set(false) {}
+   node(TValue value) : value_set(true)
    {
       this->value = value;
    }
@@ -39,13 +40,24 @@ class node
    using size_type = typename std::vector<std::shared_ptr<node<TValue>>>::size_type;
 
    // Value management
-   TValue get() const noexcept { return value; }
-   void set(TValue value) { this->value = value; }
+   TValue get() const
+   {
+      if (!value_set)
+         throw tree_error("Node does not contain any value");
+      return value;
+   }
+   void set(TValue value)
+   {
+      this->value = value;
+      value_set = true;
+   }
 
    // Children management
-   void add_child(TValue value)
+   std::shared_ptr<node<TValue>> add_child(TValue value)
    {
-      add_child(make(value));
+      auto node = make(value);
+      add_child(node);
+      return node;
    }
 
    void add_child(std::shared_ptr<node<TValue>> node)
@@ -76,5 +88,6 @@ class node
    // properties
    size_type get_children_count() const noexcept { return _children.size(); }
    bool is_leaf() const noexcept { return _children.size() == 0; }
+   bool has_value() const noexcept { return value_set; }
 };
 } // namespace sanelli::tree

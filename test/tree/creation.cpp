@@ -9,6 +9,8 @@ SCENARIO("Creating a tree")
       auto node = sanelli::tree::node<char>::make();
       REQUIRE(node != nullptr);
       REQUIRE(node->is_leaf());
+      REQUIRE_FALSE(node->has_value());
+      REQUIRE_THROWS_AS(node->get(), sanelli::tree::tree_error);
       REQUIRE(node->get_children_count() == 0);
 
       WHEN("A value is set")
@@ -37,6 +39,7 @@ SCENARIO("Creating a tree")
       REQUIRE(node != nullptr);
       REQUIRE(node->is_leaf());
       REQUIRE(node->get() == 'x');
+      REQUIRE(node->has_value());
       REQUIRE(node->get_children_count() == 0);
    }
 
@@ -58,8 +61,8 @@ SCENARIO("Creating a tree")
          int index = 0;
          for (auto it = node->begin(); it != node->end(); ++it, ++index)
          {
-            auto node = *it;
-            REQUIRE(node->get() == values.at(index));
+            auto child = *it;
+            REQUIRE(child->get() == values.at(index));
             REQUIRE(node->child_at(index)->get() == values.at(index));
          }
          REQUIRE(index == 3);
@@ -70,8 +73,8 @@ SCENARIO("Creating a tree")
          int index = 0;
          for (auto it = node->cbegin(); it != node->cend(); ++it, ++index)
          {
-            auto node = *it;
-            REQUIRE(node->get() == values.at(index));
+            auto child = *it;
+            REQUIRE(child->get() == values.at(index));
             REQUIRE(node->child_at(index)->get() == values.at(index));
          }
          REQUIRE(index == 3);
