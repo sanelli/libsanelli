@@ -1,0 +1,2 @@
+# libsanelli
+A C++ library
