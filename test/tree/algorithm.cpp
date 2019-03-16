@@ -1,23 +1,12 @@
 #include <catch2/catch.hpp>
 
+#include <memory>
+#include <sstream>
+
 #include <sanelli/tree/tree.hpp>
 
-SCENARIO("Outputting a tree", "[tree],[output]")
+SCENARIO("Visiting a tree", "[tree],[visit]")
 {
-   GIVEN("A tree with two levels")
-   {
-      auto root = sanelli::tree::node<char>::make('a');
-      root->add_child('b');
-      root->add_child('c');
-      root->add_child('d');
-
-      WHEN("the graphviz description is generated")
-      {
-         auto graphviz = sanelli::tree::to_graphviz(root);
-         REQUIRE(graphviz.size() > 0);
-      }
-   }
-
    GIVEN("A tree with three levels")
    {
       auto root = sanelli::tree::node<char>::make('a');
@@ -32,10 +21,16 @@ SCENARIO("Outputting a tree", "[tree],[output]")
       auto child_h = child_d->add_child('h');
       auto child_i = child_d->add_child('i');
 
-      WHEN("the graphviz description is generated")
+      WHEN("the tree is visited")
       {
-         auto graphviz = sanelli::tree::to_graphviz(root);
-         REQUIRE(graphviz.size() > 0);
+         std::stringstream stream;
+         auto callback = [&stream](std::shared_ptr<sanelli::tree::node<char>> node_tree) -> void {
+            if (node_tree->has_value())
+               stream << node_tree->get();
+         };
+         sanelli::tree::visit_preorder(root, callback);
+         auto result = stream.str();
+         REQUIRE(result == "efbcghia");
       }
    }
 }

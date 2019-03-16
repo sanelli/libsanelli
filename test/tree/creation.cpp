@@ -2,7 +2,7 @@
 
 #include <sanelli/tree/tree.hpp>
 
-SCENARIO("Creating a tree")
+SCENARIO("Creating a tree", "[tree],[create]")
 {
    GIVEN("Adding a single node WITHOUT a value")
    {
