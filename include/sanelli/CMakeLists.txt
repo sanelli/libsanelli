@@ -4,3 +4,5 @@ target_sources(sanelli
 )
 
 add_subdirectory(tree)
+add_subdirectory(regexp)
+
