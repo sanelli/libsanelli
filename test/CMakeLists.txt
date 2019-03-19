@@ -3,5 +3,6 @@ target_sources(testme
         test.cpp
 )
 
-add_subdirectory(tree)
 add_subdirectory(sanelli)
+add_subdirectory(tree)
+add_subdirectory(automa)
