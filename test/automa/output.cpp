@@ -16,9 +16,6 @@ SCENARIO("Automaton output is required")
       std::string letters2("def");
       auto atm2 = sanelli::automa::create_selection_automaton<char, unsigned int>(letters2.begin(), letters2.end());
 
-      std::string letters3("ghi");
-      auto atm3 = sanelli::automa::create_selection_automaton<char, unsigned int>(letters3.begin(), letters3.end());
-
       WHEN("they are joined together (&)")
       {
 

@@ -44,8 +44,9 @@ SCENARIO("Automaton creation with algorithms")
       }
    }
 
-   GIVEN("two simple automaton"){
-      
+   GIVEN("three simple automaton")
+   {
+
       std::string letters1("abc");
       auto atm1 = sanelli::automa::create_selection_automaton<char, unsigned int>(letters1.begin(), letters1.end());
 
@@ -55,7 +56,8 @@ SCENARIO("Automaton creation with algorithms")
       std::string letters3("ghi");
       auto atm3 = sanelli::automa::create_selection_automaton<char, unsigned int>(letters3.begin(), letters3.end());
 
-      WHEN("they are joined together (&)"){
+      WHEN("two of them are joined together (&)")
+      {
 
          auto result = atm1 & atm2;
          REQUIRE(result != nullptr);
@@ -75,7 +77,8 @@ SCENARIO("Automaton creation with algorithms")
          REQUIRE(result->is_final_state(3));
       }
 
-       WHEN("they are disjoined together (|)"){
+      WHEN("thwo of them are disjoined together (|)")
+      {
 
          auto result = atm1 | atm2;
          REQUIRE(result != nullptr);
@@ -83,9 +86,26 @@ SCENARIO("Automaton creation with algorithms")
          //std::cout << sanelli::automa::to_graphziv(result) << std::endl;
       }
 
-      WHEN("they are disjoined together (|)"){
+      WHEN("three of them are disjoined together (|)")
+      {
 
          auto result = atm1 | atm2 | atm3;
+         REQUIRE(result != nullptr);
+
+         //std::cout << sanelli::automa::to_graphziv(result) << std::endl;
+      }
+
+      WHEN("the * operator is applied to one of them")
+      {
+         auto result = sanelli::automa::operator*(atm1);
+         REQUIRE(result != nullptr);
+
+         //std::cout << sanelli::automa::to_graphziv(result) << std::endl;
+      }
+
+      WHEN("the + operator is applied to one of them")
+      {
+         auto result = +atm1;
          REQUIRE(result != nullptr);
 
          //std::cout << sanelli::automa::to_graphziv(result) << std::endl;

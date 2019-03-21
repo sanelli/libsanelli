@@ -113,15 +113,23 @@ std::shared_ptr<automaton<TValue, TState>> operator|(std::shared_ptr<automaton<T
 }
 
 template <typename TValue, typename TState = unsigned int>
-std::shared_ptr<automaton<TValue, TState>> operator*(std::shared_ptr<automaton<TValue, TState>> left)
+std::shared_ptr<automaton<TValue, TState>> operator*(std::shared_ptr<automaton<TValue, TState>> other)
 {
-   return nullptr;
+   if (other->get_number_of_final_states() != 1)
+      throw automa_error("automaton must contain exactly one final state");
+   auto atm = other->copy();
+   // Need to check the edge is not present because user could apply star operator twice
+   if (!atm->has_edge(atm->get_initial_state(), atm->epsilon(), atm->get_unique_final_state()))
+      atm->add_edge(atm->get_initial_state(), atm->epsilon(), atm->get_unique_final_state());
+   return atm;
 }
 
 template <typename TValue, typename TState = unsigned int>
-std::shared_ptr<automaton<TValue, TState>> operator+(std::shared_ptr<automaton<TValue, TState>> left)
+std::shared_ptr<automaton<TValue, TState>> operator+(std::shared_ptr<automaton<TValue, TState>> other)
 {
-   return nullptr;
+   auto left = other->copy();
+   auto right = sanelli::automa::operator*(other);
+   return left & right;
 }
 
 /**
