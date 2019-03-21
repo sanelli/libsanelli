@@ -4,6 +4,8 @@
 
 #include <sanelli/tree/tree.hpp>
 #include <sanelli/regexp/regexp.hpp>
+#include <sanelli/automa/automa.hpp>
+#include <sanelli/debug/debug.hpp>
 
 namespace sanelli
 {

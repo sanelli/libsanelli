@@ -4,7 +4,7 @@
 #include <memory>
 #include <sstream>
 
-#include <sanelli/automa/impl/auotmaton.hpp>
+#include <sanelli/automa/impl/automaton.hpp>
 
 namespace sanelli::automa
 {

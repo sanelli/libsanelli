@@ -2,8 +2,7 @@
 
 #include <memory>
 #include <sstream>
-
-// #include <iostream>
+#include <iostream>
 
 #include <sanelli/automa/automa.hpp>
 
@@ -46,7 +45,6 @@ SCENARIO("Automaton creation with algorithms")
 
    GIVEN("three simple automaton")
    {
-
       std::string letters1("abc");
       auto atm1 = sanelli::automa::create_selection_automaton<char, unsigned int>(letters1.begin(), letters1.end());
 
@@ -58,7 +56,6 @@ SCENARIO("Automaton creation with algorithms")
 
       WHEN("two of them are joined together (&)")
       {
-
          auto result = atm1 & atm2;
          REQUIRE(result != nullptr);
          REQUIRE(result->get_number_of_states() == 3);
@@ -79,11 +76,8 @@ SCENARIO("Automaton creation with algorithms")
 
       WHEN("thwo of them are disjoined together (|)")
       {
-
          auto result = atm1 | atm2;
          REQUIRE(result != nullptr);
-
-         //std::cout << sanelli::automa::to_graphziv(result) << std::endl;
       }
 
       WHEN("three of them are disjoined together (|)")
@@ -91,24 +85,101 @@ SCENARIO("Automaton creation with algorithms")
 
          auto result = atm1 | atm2 | atm3;
          REQUIRE(result != nullptr);
-
-         //std::cout << sanelli::automa::to_graphziv(result) << std::endl;
       }
 
       WHEN("the * operator is applied to one of them")
       {
          auto result = sanelli::automa::operator*(atm1);
          REQUIRE(result != nullptr);
-
-         //std::cout << sanelli::automa::to_graphziv(result) << std::endl;
       }
 
       WHEN("the + operator is applied to one of them")
       {
          auto result = +atm1;
          REQUIRE(result != nullptr);
+      }
+   }
+}
 
-         //std::cout << sanelli::automa::to_graphziv(result) << std::endl;
+SCENARIO("Automaton execution", "[automa][algo][match]")
+{
+   GIVEN("A simple automaton in the form ((a|b)c)+")
+   {
+      auto atm1 = sanelli::automa::create_single_value<char, unsigned int>('a');
+      auto atm2 = sanelli::automa::create_single_value<char, unsigned int>('b');
+      auto atm3 = sanelli::automa::create_single_value<char, unsigned int>('c');
+
+      auto atm = +((atm1 | atm2) & atm3);
+
+      WHEN("matches string 'ac'")
+      {
+         std::string str("ac");
+         auto result = sanelli::automa::run_automaton(atm, str.begin(), str.end());
+         REQUIRE(atm->is_final_state(result.first));
+         REQUIRE(result.second == str.end());
+      }
+
+      WHEN("matches string 'acac'")
+      {
+         std::string str("acac");
+         auto result = sanelli::automa::run_automaton(atm, str.begin(), str.end());
+         REQUIRE(atm->is_final_state(result.first));
+         REQUIRE(result.second == str.end());
+      }
+
+      WHEN("matches string 'bcac'")
+      {
+         std::string str("bcac");
+         auto result = sanelli::automa::run_automaton(atm, str.begin(), str.end());
+         REQUIRE(atm->is_final_state(result.first));
+         REQUIRE(result.second == str.end());
+      }
+
+      WHEN("does not match string 'aca'")
+      {
+         std::string str("aca");
+         auto result = sanelli::automa::run_automaton(atm, str.begin(), str.end());
+         REQUIRE(result.first == atm->zero_state());
+         REQUIRE(result.second == str.end());
+      }
+
+      WHEN("does not match string 'xxx'")
+      {
+         std::string str("xxx");
+         auto result = sanelli::automa::run_automaton(atm, str.begin(), str.end());
+         REQUIRE(result.first == atm->zero_state());
+      }
+   }
+
+   GIVEN("A simple automaton in the form ((a|b)c)")
+   {
+      auto atm1 = sanelli::automa::create_single_value<char, unsigned int>('a');
+      auto atm2 = sanelli::automa::create_single_value<char, unsigned int>('b');
+      auto atm3 = sanelli::automa::create_single_value<char, unsigned int>('c');
+
+      auto atm = (atm1 | atm2) & atm3;
+
+      WHEN("matches string 'ac'")
+      {
+         std::string str("ac");
+         auto result = sanelli::automa::run_automaton(atm, str.begin(), str.end());
+         REQUIRE(atm->is_final_state(result.first));
+         REQUIRE(result.second == str.end());
+      }
+
+      WHEN("matches string 'bc'")
+      {
+         std::string str("bc");
+         auto result = sanelli::automa::run_automaton(atm, str.begin(), str.end());
+         REQUIRE(atm->is_final_state(result.first));
+         REQUIRE(result.second == str.end());
+      }
+
+      WHEN("does not match string 'aca'")
+      {
+         std::string str("aca");
+         auto result = sanelli::automa::run_automaton(atm, str.begin(), str.end());
+         REQUIRE(result.first == atm->zero_state());
       }
    }
 }

@@ -2,8 +2,15 @@
 
 #include <array>
 #include <memory>
-#include <sanelli/automa/impl/auotmaton.hpp>
+#include <utility>
+#include <set>
+#include <algorithm>
+#include <cmath>
+#include <sanelli/automa/impl/automaton.hpp>
 #include <sanelli/automa/impl/exception.hpp>
+#include <sanelli/debug/debug.hpp>
+
+#include <iostream>
 
 namespace sanelli::automa
 {
@@ -19,10 +26,18 @@ TState join(std::shared_ptr<automaton<TValue, TState>> result,
    // Add N-1 states from the right state
    // (-1 because we do not need to add the initial state from right
    // because it will be the same as the final state of left automaton)
+
+   auto delta = result->get_number_of_states();
+   auto right_initial = atm->get_initial_state();
+
    result->add_states(atm->get_number_of_states() - 1);
 
    // Create a lmabda function that given the right state ID return the result state ID
-   auto convert_state = [junction_state](TState rs) -> TState { return junction_state + rs - 1; };
+   auto convert_state = [delta, junction_state, right_initial](TState rs) -> TState {
+      if (rs == right_initial)
+         return junction_state;
+      return delta + rs - 1;
+   };
 
    TState last_final_state = result->zero_state();
 
@@ -121,6 +136,11 @@ std::shared_ptr<automaton<TValue, TState>> operator*(std::shared_ptr<automaton<T
    // Need to check the edge is not present because user could apply star operator twice
    if (!atm->has_edge(atm->get_initial_state(), atm->epsilon(), atm->get_unique_final_state()))
       atm->add_edge(atm->get_initial_state(), atm->epsilon(), atm->get_unique_final_state());
+
+   // Need to add the edge back also in order to be able to handle repetition
+   if (!atm->has_edge(atm->get_unique_final_state(), atm->epsilon(), atm->get_initial_state()))
+      atm->add_edge(atm->get_unique_final_state(), atm->epsilon(), atm->get_initial_state());
+
    return atm;
 }
 
@@ -187,7 +207,84 @@ std::shared_ptr<automaton<TValue, TState>> create_single_value(TValue value)
 template <typename TValue, typename TState = unsigned int>
 std::shared_ptr<automaton<TValue, TState>> make_deterministic(std::shared_ptr<automaton<TValue, TState>>)
 {
+   // TODO: Implement me
    return nullptr;
+}
+
+namespace impl
+{
+
+template <typename TValue, typename TState = unsigned int>
+void close_states(const std::shared_ptr<automaton<TValue, TState>> atm, std::set<TState> &states)
+{
+   for (auto state = states.begin(); state != states.end(); ++state)
+   {
+      auto edges = atm->get_edges(*state);
+      for (auto itEdge = edges.first; itEdge != edges.second; ++itEdge)
+      {
+         auto edge = (*itEdge).second;
+         if (edge.first == atm->epsilon())
+            states.insert(edge.second);
+      }
+   }
+}
+
+template <typename TValue, typename TIterator, typename TState = unsigned int>
+std::pair<TState, TIterator> run_non_deterministic(const std::shared_ptr<automaton<TValue, TState>> atm, TIterator first, TIterator last)
+{
+   std::set<TState> states;
+   states.insert(atm->get_initial_state());
+   auto it = first;
+
+   close_states(atm, states);
+
+   // For each input element
+   for (; it != last; ++it)
+   {
+      // No more states to investigate
+      if (states.size() == 0)
+         break;
+
+      // Get all the possible
+      std::set<TState> new_states;
+      for (auto state = states.begin(); state != states.end(); ++state)
+      {
+         auto edges = atm->get_edges(*state);
+         bool has_following_edge = false;
+         for (auto itEdge = edges.first; itEdge != edges.second; ++itEdge)
+         {
+            auto edge = (*itEdge).second;
+            if (edge.first == *it)
+            {
+               new_states.insert(edge.second);
+               has_following_edge = true;
+            }
+         }
+      }
+
+      states = new_states;
+      close_states(atm, states);
+   }
+
+   // Compute the final state if any
+   auto final_state_it = std::find_if(states.begin(), states.end(), [&atm](TState s) -> bool { return atm->is_final_state(s); });
+   auto final_state = final_state_it != states.end() ? *final_state_it : atm->zero_state();
+   return std::make_pair(final_state, it);
+}
+
+template <typename TValue, typename TIterator, typename TState = unsigned int>
+std::pair<TState, TIterator> run_deterministic(const std::shared_ptr<automaton<TValue, TState>> atm, TIterator first, TIterator last)
+{
+   // TODO: implement me
+   return nullptr;
+}
+
+} // namespace impl
+
+template <typename TValue, typename TIterator, typename TState = unsigned int>
+std::pair<TState, TIterator> run_automaton(const std::shared_ptr<automaton<TValue, TState>> atm, TIterator first, TIterator last)
+{
+   return impl::run_non_deterministic(atm, first, last);
 }
 
 } // namespace sanelli::automa
