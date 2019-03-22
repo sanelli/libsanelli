@@ -8,11 +8,11 @@
 
 // -- Grammar without the left recursion --
 // E1 -> E2 R1
-// R1 -> '|' E2 R1 | ε
+// R1 -> '|' E2 R1
 // E2 -> E3 R2
-// R2 -> '&' E3 R2 | E3 R2 | ε
+// R2 -> '&' E3 R2 | E3 R2
 // E3 -> TERM '*' | TERM '+' | TERM
-// TERM -> letter | digit | symbol
+// TERM -> letter | digit | symbol | ε | '(' E1 ')' | '[' character_class ']'
 
 namespace sanelli::regexp
 {
