@@ -40,7 +40,7 @@ SCENARIO("Expand character class", "[sanelli][string][character_class]")
       REQUIRE(result.size() == 2);
    }
 
-   GIVEN("The character class [a-zA-z]")
+   GIVEN("The character class [a-zA-Z]")
    {
       std::string input("a-zA-Z");
       sanelli::string::expand_character_class<char>(input.begin(), input.end(), std::inserter(result, result.begin()));
@@ -50,5 +50,29 @@ SCENARIO("Expand character class", "[sanelli][string][character_class]")
       for (auto c = 'A'; c <= 'Z'; ++c)
          REQUIRE(result.count(c) > 0);
       REQUIRE(result.size() == ('z'-'a'+1+'Z'-'A'+1));
+   }
+
+   GIVEN("The character class [a-zA-Z_]")
+   {
+      std::string input("a-zA-Z_");
+      sanelli::string::expand_character_class<char>(input.begin(), input.end(), std::inserter(result, result.begin()));
+      
+      for (auto c = 'a'; c <= 'z'; ++c)
+         REQUIRE(result.count(c) > 0);
+      for (auto c = 'A'; c <= 'Z'; ++c)
+         REQUIRE(result.count(c) > 0);
+      REQUIRE(result.size() == ('z'-'a'+1+'Z'-'A'+1+1));
+      REQUIRE(result.count('_') > 0);
+   }
+
+   GIVEN("The character class [ab-ez]")
+   {
+      std::string input("ab-ez");
+      sanelli::string::expand_character_class<char>(input.begin(), input.end(), std::inserter(result, result.begin()));
+      
+      for (auto c = 'a'; c <= 'e'; ++c)
+         REQUIRE(result.count(c) > 0);
+      REQUIRE(result.count('z') > 0);
+      REQUIRE(result.size() == 6);
    }
 }

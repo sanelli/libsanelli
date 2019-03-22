@@ -1,10 +1,12 @@
 #include <catch2/catch.hpp>
 
 #include <memory>
-#include <sstream>
-#include <iostream>
+#include <set>
+#include <iterator>
 
 #include <sanelli/automa/automa.hpp>
+#include <sanelli/string/string.hpp>
+#include <sanelli/debug/debug.hpp>
 
 SCENARIO("Automaton creation with algorithms")
 {
@@ -181,5 +183,57 @@ SCENARIO("Automaton execution", "[automa][algo][match]")
          auto result = sanelli::automa::run_automaton(atm, str.begin(), str.end());
          REQUIRE(result.first == atm->zero_state());
       }
+   }
+
+   GIVEN("The expression [a-zA-Z_][a-zA-Z_0-9]*"){
+      std::set<char> letters_or_underscore;
+      std::set<char> letters_or_digits_underscore;
+
+      std::string letters_or_underscore_repr("a-zA-Z_");
+      sanelli::string::expand_character_class<char>(letters_or_underscore_repr.begin(), letters_or_underscore_repr.end(), std::inserter(letters_or_underscore, letters_or_underscore.begin()));
+
+      std::string letters_or_digits_underscore_repr("a-zA-Z_0-9");
+      sanelli::string::expand_character_class<char>(letters_or_digits_underscore_repr.begin(), letters_or_digits_underscore_repr.end(), std::inserter(letters_or_digits_underscore, letters_or_digits_underscore.begin()));
+
+      auto atm = 
+         sanelli::automa::create_selection_automaton<char, unsigned int>(letters_or_underscore.begin(), letters_or_underscore.end())
+         & sanelli::automa::operator*(sanelli::automa::create_selection_automaton<char, unsigned int>(letters_or_digits_underscore.begin(), letters_or_digits_underscore.end()));
+
+      WHEN("matches with 'Foo_01'"){
+         std::string str("Foo_01");
+         auto result = sanelli::automa::run_automaton(atm, str.begin(), str.end());
+         REQUIRE(result.first != atm->zero_state());
+      }
+
+      WHEN("matches with 'pippoABC'"){
+         std::string str("pippoABC");
+         auto result = sanelli::automa::run_automaton(atm, str.begin(), str.end());
+         REQUIRE(result.first != atm->zero_state());
+      }
+
+      WHEN("matches with '_1'"){
+         std::string str("_1");
+         auto result = sanelli::automa::run_automaton(atm, str.begin(), str.end());
+         REQUIRE(result.first != atm->zero_state());
+      }
+
+      WHEN("matches with '___'"){
+         std::string str("___");
+         auto result = sanelli::automa::run_automaton(atm, str.begin(), str.end());
+         REQUIRE(result.first != atm->zero_state());
+      }
+
+      WHEN("does not match with '100'"){
+         std::string str("100");
+         auto result = sanelli::automa::run_automaton(atm, str.begin(), str.end());
+         REQUIRE(result.first == atm->zero_state());
+      }
+
+      WHEN("does not match with '2_'"){
+         std::string str("2_");
+         auto result = sanelli::automa::run_automaton(atm, str.begin(), str.end());
+         REQUIRE(result.first == atm->zero_state());
+      }
+
    }
 }
