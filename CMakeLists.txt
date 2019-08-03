@@ -16,9 +16,9 @@ add_subdirectory(src)
 target_include_directories(sanelli PUBLIC include)
 
 # Manage test executable
-add_executable(testme "")
-target_link_libraries(testme Catch2::Catch2)
-target_link_libraries(testme sanelli)
+add_executable(sanelli-test "")
+target_link_libraries(sanelli-test Catch2::Catch2)
+target_link_libraries(sanelli-test sanelli)
 
 add_subdirectory(test)
-target_include_directories(testme PUBLIC ${CMAKE_CURRENT_LIST_DIR})
+target_include_directories(sanelli-test PUBLIC ${CMAKE_CURRENT_LIST_DIR})

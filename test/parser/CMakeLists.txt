@@ -1,4 +1,4 @@
-target_sources(testme
+target_sources(sanelli-test
     PRIVATE
         parser.cpp
 )
