@@ -3,6 +3,7 @@
 #include <vector>
 #include <memory>
 #include <utility>
+#include <string>
 
 #include <sanelli/tree/impl/exception.hpp>
 
