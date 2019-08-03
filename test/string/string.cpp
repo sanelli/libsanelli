@@ -1,78 +1,52 @@
 #include <catch2/catch.hpp>
-
-#include <set>
-#include <iterator>
+#include <string>
 
 #include <sanelli/string/string.hpp>
-#include <sanelli/debug/debug.hpp>
 
-SCENARIO("Expand character class", "[sanelli][string][character_class]")
-{
-   std::set<char> result;
+SCENARIO("String generation", "[string]"){
+   
+    GIVEN("A set of variables"){
 
-   GIVEN("The character class [a-z]")
-   {
-      std::string input("a-z");
-      sanelli::string::expand_character_class<char>(input.begin(), input.end(), std::inserter(result, result.begin()));
-      
-      for (auto c = 'a'; c <= 'z'; ++c)
-         REQUIRE(result.count(c) > 0);
-      REQUIRE(result.size() == ('z'-'a'+1));
-   }
+       auto a = "Hello world";
+       auto b = 33;
+       auto c = std::string("XXX");
 
-   GIVEN("The character class [0-9]")
-   {
-      std::string input("0-9");
-      sanelli::string::expand_character_class<char>(input.begin(), input.end(), std::inserter(result, result.begin()));
-      
-      for (auto c = '0'; c <= '9'; ++c)
-         REQUIRE(result.count(c) > 0);
-      REQUIRE(result.size() == 10);
-   }
+       WHEN("A string is created") {
+         auto result = sanelli::make_string(a,b,c);
+         REQUIRE(result == "Hello world33XXX");
+       }
+    }
+}
 
-   GIVEN("The character class [01]")
-   {
-      std::string input("01");
-      sanelli::string::expand_character_class<char>(input.begin(), input.end(), std::inserter(result, result.begin()));
-      
-      for (auto c = '0'; c <= '1'; ++c)
-         REQUIRE(result.count(c) > 0);
-      REQUIRE(result.size() == 2);
-   }
+SCENARIO("String trimming", "[string]"){
+   
+    GIVEN("A set of strings"){
 
-   GIVEN("The character class [a-zA-Z]")
-   {
-      std::string input("a-zA-Z");
-      sanelli::string::expand_character_class<char>(input.begin(), input.end(), std::inserter(result, result.begin()));
-      
-      for (auto c = 'a'; c <= 'z'; ++c)
-         REQUIRE(result.count(c) > 0);
-      for (auto c = 'A'; c <= 'Z'; ++c)
-         REQUIRE(result.count(c) > 0);
-      REQUIRE(result.size() == ('z'-'a'+1+'Z'-'A'+1));
-   }
+      std::string a {"hello world"};
+      std::string b {"  hello world"};
+      std::string c {"hello world  "};
+      std::string d {"  hello world  "};
 
-   GIVEN("The character class [a-zA-Z_]")
-   {
-      std::string input("a-zA-Z_");
-      sanelli::string::expand_character_class<char>(input.begin(), input.end(), std::inserter(result, result.begin()));
-      
-      for (auto c = 'a'; c <= 'z'; ++c)
-         REQUIRE(result.count(c) > 0);
-      for (auto c = 'A'; c <= 'Z'; ++c)
-         REQUIRE(result.count(c) > 0);
-      REQUIRE(result.size() == ('z'-'a'+1+'Z'-'A'+1+1));
-      REQUIRE(result.count('_') > 0);
-   }
+      WHEN("Left trimming") {
+         sanelli::ltrim(a);
+         REQUIRE(a == "hello world");
+         sanelli::ltrim(b);
+         REQUIRE(b == "hello world");
+         sanelli::ltrim(c);
+         REQUIRE(c == "hello world  ");
+         sanelli::ltrim(d);
+         REQUIRE(d == "hello world  ");
+      }
 
-   GIVEN("The character class [ab-ez]")
-   {
-      std::string input("ab-ez");
-      sanelli::string::expand_character_class<char>(input.begin(), input.end(), std::inserter(result, result.begin()));
-      
-      for (auto c = 'a'; c <= 'e'; ++c)
-         REQUIRE(result.count(c) > 0);
-      REQUIRE(result.count('z') > 0);
-      REQUIRE(result.size() == 6);
-   }
+      WHEN("Right trimming") {
+         sanelli::rtrim(a);
+         REQUIRE(a == "hello world");
+         sanelli::rtrim(b);
+         REQUIRE(b == "  hello world");
+         sanelli::rtrim(c);
+         REQUIRE(c == "hello world");
+         sanelli::rtrim(d);
+         REQUIRE(d == "  hello world");
+      }
+    }
 }

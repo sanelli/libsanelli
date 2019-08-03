@@ -12,7 +12,7 @@
 
 #include <iostream>
 
-namespace sanelli::automa
+namespace sanelli
 {
 
 namespace impl
@@ -148,7 +148,7 @@ template <typename TValue, typename TState = unsigned int>
 std::shared_ptr<automaton<TValue, TState>> operator+(std::shared_ptr<automaton<TValue, TState>> other)
 {
    auto left = other->copy();
-   auto right = sanelli::automa::operator*(other);
+   auto right = sanelli::operator*(other);
    return left & right;
 }
 
@@ -287,4 +287,4 @@ std::pair<TState, TIterator> run_automaton(const std::shared_ptr<automaton<TValu
    return impl::run_non_deterministic(atm, first, last);
 }
 
-} // namespace sanelli::automa
+} // namespace sanelli

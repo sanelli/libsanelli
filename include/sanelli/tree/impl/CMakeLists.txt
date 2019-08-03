@@ -1,5 +1,5 @@
 target_sources(sanelli
-    PRIVATE
+   PUBLIC
         node.hpp    
         exception.hpp
         algorithm.hpp

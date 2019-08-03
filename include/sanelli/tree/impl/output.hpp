@@ -6,7 +6,7 @@
 
 #include <sanelli/tree/impl/node.hpp>
 
-namespace sanelli::tree
+namespace sanelli
 {
 namespace impl
 {
@@ -54,4 +54,4 @@ std::string to_graphviz(std::shared_ptr<node<TValue>> node)
    + " }\n";
 }
 
-} // namespace sanelli::tree
+} // namespace sanelli

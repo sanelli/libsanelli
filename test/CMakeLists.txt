@@ -3,7 +3,8 @@ target_sources(testme
         test.cpp
 )
 
-add_subdirectory(sanelli)
 add_subdirectory(tree)
 add_subdirectory(automa)
+add_subdirectory(tokenizer)
+add_subdirectory(parser)
 add_subdirectory(string)

@@ -5,8 +5,5 @@
 #include <sanelli/tree/tree.hpp>
 #include <sanelli/automa/automa.hpp>
 #include <sanelli/debug/debug.hpp>
-
-namespace sanelli
-{
-std::string get_version();
-}
+#include <sanelli/string/string.hpp>
+#include <sanelli/io/io.hpp>

@@ -5,7 +5,7 @@
 
 #include <sanelli/tree/impl/node.hpp>
 
-namespace sanelli::tree
+namespace sanelli
 {
 
 template <typename TValue,
@@ -21,4 +21,4 @@ void visit_preorder(std::shared_ptr<node<TValue>> tree,
    node_callback(tree);
 }
 
-} // namespace sanelli::tree
+} // namespace sanelli

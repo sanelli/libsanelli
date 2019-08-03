@@ -6,11 +6,11 @@ SCENARIO("Creating a tree", "[tree],[create]")
 {
    GIVEN("Adding a single node WITHOUT a value")
    {
-      auto node = sanelli::tree::node<char>::make();
+      auto node = sanelli::node<char>::make();
       REQUIRE(node != nullptr);
       REQUIRE(node->is_leaf());
       REQUIRE_FALSE(node->has_value());
-      REQUIRE_THROWS_AS(node->get(), sanelli::tree::tree_error);
+      REQUIRE_THROWS_AS(node->get(), sanelli::tree_error);
       REQUIRE(node->get_children_count() == 0);
 
       WHEN("A value is set")
@@ -29,13 +29,13 @@ SCENARIO("Creating a tree", "[tree],[create]")
          REQUIRE(child->is_leaf());
          REQUIRE(child->get_children_count() == 0);
 
-         REQUIRE_THROWS_AS(node->child_at(1), sanelli::tree::tree_error);
+         REQUIRE_THROWS_AS(node->child_at(1), sanelli::tree_error);
       }
    }
 
    GIVEN("Adding a single node WITH a value")
    {
-      auto node = sanelli::tree::node<char>::make('x');
+      auto node = sanelli::node<char>::make('x');
       REQUIRE(node != nullptr);
       REQUIRE(node->is_leaf());
       REQUIRE(node->get() == 'x');
@@ -48,7 +48,7 @@ SCENARIO("Creating a tree", "[tree],[create]")
       std::vector<char> values = {'a',
                                   'b',
                                   'c'};
-      auto node = sanelli::tree::node<char>::make();
+      auto node = sanelli::node<char>::make();
       for (auto vit = values.begin(); vit != values.end(); ++vit)
       {
          node->add_child(*vit);

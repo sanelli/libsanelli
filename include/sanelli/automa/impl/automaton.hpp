@@ -9,7 +9,7 @@
 
 #include <sanelli/automa/impl/exception.hpp>
 
-namespace sanelli::automa
+namespace sanelli
 {
 template <
     typename TValue,
@@ -146,4 +146,4 @@ class automaton
    }
 };
 
-} // namespace sanelli::automa
+} // namespace sanelli

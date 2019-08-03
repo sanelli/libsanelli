@@ -1,4 +1,6 @@
+add_subdirectory(impl)
+
 target_sources(sanelli
-    PRIVATE
+    PUBLIC
         string.hpp
 )

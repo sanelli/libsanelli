@@ -1,22 +1,43 @@
 #pragma once
 
 #include <iostream>
-#include <utility>
 
-namespace sanelli::debug
+#define SANELLI_DEBUG_ENABLED
+
+#define SANELLI_DEBUG_GET_MACRO(_1, _2, NAME, ...) NAME
+#define SANELLI_DEBUG(...)                                        \
+   SANELLI_DEBUG_GET_MACRO(__VA_ARGS__, SANELLI_DEBUG2, SANELLI_DEBUG1) \
+   (__VA_ARGS__)
+
+#ifdef SANELLI_DEBUG_ENABLED
+
+#define SANELLI_DEBUG1(x) \
+   {                   \
+      std::cerr << x;  \
+   }
+#define SANELLI_DEBUG2(debugger, x)                                            \
+   {                                                                           \
+      if (sanelli::sanelli_debugger::is_debug_enabled(debugger))               \
+      {                                                                        \
+         std::cerr << x;                                                       \
+      }                                                                        \
+   }
+#define SANELLI_INSTALL_DEBUGGER(debugger)                                     \
+   {                                                                           \
+      sanelli::sanelli_debugger::enabled_debug_for(debugger);                  \
+   }
+#else
+#define SANELLI_DEBUG1(x)
+#define SANELLI_DEBUG2(x,y)
+#define SANELLI_INSTALL_DEBUGGER(debugger)
+#endif
+
+namespace sanelli
 {
-
-template <typename TContainer>
-void printctr(const TContainer &container)
+class sanelli_debugger
 {
-   for (auto it = std::begin(container); it != std::end(container); ++it)
-      std::cout << *it << " ";
-   std::cout << std::endl;
-}
-
-template <typename T>
-void println(T t){
-   std::cout << t << std::endl;
-}
-
-} // namespace sanelli::debug
+public:
+   static void enabled_debug_for(const char *debugger);
+   static bool is_debug_enabled(const char *debugger);
+};
+} // namespace sanelli

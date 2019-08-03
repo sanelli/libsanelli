@@ -6,7 +6,7 @@
 
 #include <sanelli/tree/impl/exception.hpp>
 
-namespace sanelli::tree
+namespace sanelli
 {
 template <typename TValue>
 class node
@@ -90,4 +90,4 @@ class node
    bool is_leaf() const noexcept { return _children.size() == 0; }
    bool has_value() const noexcept { return value_set; }
 };
-} // namespace sanelli::tree
+} // namespace sanelli

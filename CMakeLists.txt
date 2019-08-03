@@ -10,10 +10,10 @@ add_subdirectory(libs)
 
 # Manage sanelli lib
 add_library(sanelli "")
+set_target_properties(sanelli PROPERTIES LINKER_LANGUAGE CXX)
 add_subdirectory(include)
 add_subdirectory(src)
 target_include_directories(sanelli PUBLIC include)
-
 
 # Manage test executable
 add_executable(testme "")

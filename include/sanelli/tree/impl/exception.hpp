@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-namespace sanelli::tree
+namespace sanelli
 {
 class tree_error : public std::domain_error
 {
@@ -11,4 +11,4 @@ class tree_error : public std::domain_error
    tree_error(const std::string &message) : domain_error(message) {}
 };
 
-} // namespace sanelli::tree
+} // namespace sanelli

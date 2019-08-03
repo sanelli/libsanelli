@@ -6,7 +6,7 @@
 
 #include <sanelli/automa/impl/automaton.hpp>
 
-namespace sanelli::automa
+namespace sanelli
 {
 
 template <typename TValue, typename TState>
@@ -46,4 +46,4 @@ std::string to_graphziv(std::shared_ptr<automaton<TValue, TState>> atm)
    return stream.str();
 }
 
-} // namespace sanelli::automa
+} // namespace sanelli

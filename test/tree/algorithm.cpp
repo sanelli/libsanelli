@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <sstream>
+#include <string>
 
 #include <sanelli/tree/tree.hpp>
 
@@ -9,10 +10,10 @@ SCENARIO("Visiting a tree", "[tree],[visit]")
 {
    GIVEN("A tree with three levels")
    {
-      auto root = sanelli::tree::node<char>::make('a');
+      auto root = sanelli::node<char>::make('a');
       auto child_b = root->add_child('b');
       auto child_c = root->add_child('c');
-      auto child_d = sanelli::tree::node<char>::make();
+      auto child_d = sanelli::node<char>::make();
       root->add_child(child_d);
 
       auto child_e = child_b->add_child('e');
@@ -24,11 +25,11 @@ SCENARIO("Visiting a tree", "[tree],[visit]")
       WHEN("the tree is visited")
       {
          std::stringstream stream;
-         auto callback = [&stream](std::shared_ptr<sanelli::tree::node<char>> node_tree) -> void {
+         auto callback = [&stream](std::shared_ptr<sanelli::node<char>> node_tree) -> void {
             if (node_tree->has_value())
                stream << node_tree->get();
          };
-         sanelli::tree::visit_preorder(root, callback);
+         sanelli::visit_preorder(root, callback);
          auto result = stream.str();
          REQUIRE(result == "efbcghia");
       }

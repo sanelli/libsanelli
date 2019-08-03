@@ -1,4 +1,2 @@
-target_sources(sanelli
-    PRIVATE
-        sanelli.cpp
-)
+add_subdirectory(debug)
+add_subdirectory(string)

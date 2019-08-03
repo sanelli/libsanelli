@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-namespace sanelli::automa
+namespace sanelli
 {
 class automa_error : public std::domain_error
 {
@@ -11,4 +11,4 @@ class automa_error : public std::domain_error
    automa_error(const std::string &message) : domain_error(message) {}
 };
 
-} // namespace sanelli::tree
+} // namespace sanelli
