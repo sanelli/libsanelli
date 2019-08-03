@@ -1,4 +1,4 @@
-target_sources(sanelli
+target_sources(libsanelli
     PUBLIC
         parser_error.hpp
         parser_context.hpp

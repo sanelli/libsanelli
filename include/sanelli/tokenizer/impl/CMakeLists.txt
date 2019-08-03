@@ -1,4 +1,4 @@
-target_sources(sanelli
+target_sources(libsanelli
     PUBLIC
         tokenizer_error.hpp
         token.hpp

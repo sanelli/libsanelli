@@ -1,6 +1,6 @@
 add_subdirectory(impl)
 
-target_sources(sanelli
+target_sources(libsanelli
     PUBLIC
         tokenizer.hpp
 )
