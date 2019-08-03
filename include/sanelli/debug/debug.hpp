@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#define SANELLI_DEBUG_ENABLED
+// #define SANELLI_DEBUG_ENABLED
 
 #define SANELLI_DEBUG_GET_MACRO(_1, _2, NAME, ...) NAME
 #define SANELLI_DEBUG(...)                                        \
