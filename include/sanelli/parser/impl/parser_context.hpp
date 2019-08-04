@@ -7,6 +7,7 @@
 
 #include <sanelli/debug/debug.hpp>
 #include <sanelli/parser/impl/parser_error.hpp>
+#include <sanelli/tokenizer/tokenizer.hpp>
 
 namespace sanelli{
 

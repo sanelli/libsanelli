@@ -8,7 +8,7 @@
 
 #include <sanelli/string/string.hpp>
 #include <sanelli/debug/debug.hpp>
-
+#include <sanelli/tokenizer/tokenizer.hpp>
 #include <sanelli/parser/impl/parser_error.hpp>
 #include <sanelli/parser/impl/parser_context.hpp>
 #include <sanelli/parser/impl/parser_io.hpp>
