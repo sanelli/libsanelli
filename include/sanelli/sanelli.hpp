@@ -9,3 +9,4 @@
 #include <sanelli/io/io.hpp>
 #include <sanelli/parser/parser.hpp>
 #include <sanelli/tokenizer/tokenizer.hpp>
+#include <sanelli/algorithm/algorithm.hpp>
