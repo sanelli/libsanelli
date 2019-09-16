@@ -11,3 +11,4 @@
 #include <sanelli/tokenizer/tokenizer.hpp>
 #include <sanelli/algorithm/algorithm.hpp>
 #include <sanelli/fuzzy/fuzzy.hpp>
+#include <sanelli/math/math.hpp>
