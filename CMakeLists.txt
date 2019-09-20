@@ -9,7 +9,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_subdirectory(libs)
 
 # Manage libsanelli lib
-add_library(libsanelli SHARED "")
+add_library(libsanelli STATIC "")
 set_target_properties(libsanelli PROPERTIES LINKER_LANGUAGE CXX)
 set_target_properties(libsanelli PROPERTIES PREFIX "")
 add_subdirectory(include)
