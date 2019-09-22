@@ -17,8 +17,8 @@ public:
    parser_error(int line, int column, const char *message) : domain_error(message), _line(line), _column(column) {}
    parser_error(int line, int column, const std::string &message) : domain_error(message), _line(line), _column(column) {}
 
-   int line() { return _line; }
-   int column() { return _column; }
+   int line() const { return _line; }
+   int column() const { return _column; }
 };
 
 }
