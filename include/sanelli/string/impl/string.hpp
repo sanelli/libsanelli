@@ -2,12 +2,16 @@
 
 #include <string>
 #include <sstream>
+#include <vector>
 
 namespace sanelli
 {
 
 int ltrim(std::string &s);
 int rtrim(std::string &s);
+void trim(std::string &s);
+
+void split(std::string s, char delim, std::vector<std::string>& out);
 
 template <typename TArg>
 inline void __make_string(std::stringstream &stream, const TArg &arg)

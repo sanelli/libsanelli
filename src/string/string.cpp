@@ -2,6 +2,8 @@
 #include <cctype>
 #include <locale>
 #include <string>
+#include <vector>
+#include <sstream>
 
 #include <sanelli/sanelli.hpp>
 
@@ -23,3 +25,16 @@ int sanelli::rtrim(std::string &s) {
     }).base(), s.end());
     return initial_length - s.length();
 }
+
+void sanelli::trim(std::string &s) {
+   ltrim(s);
+   rtrim(s);
+}
+
+void sanelli::split(std::string s, char delim, std::vector<std::string>& out) { 
+   std::stringstream stream(s);
+   std::string entry;
+   while(std::getline(stream, entry, delim))
+      out.push_back(entry);
+}
+
