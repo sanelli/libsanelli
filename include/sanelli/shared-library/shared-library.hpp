@@ -52,11 +52,13 @@ class shared_library_loader
       _libraries[library] = sanelli::memory::make_shared<TLibraryType>(library, path);
    }
 
-public:
+protected:
    shared_library_loader(std::function<std::string(std::string)> format_library_name)
        : _format_library_name(format_library_name)
    {
    }
+
+public:
    ~shared_library_loader()
    {
       _libraries.clear();
@@ -73,6 +75,8 @@ public:
       for (auto it = _libraries.begin(); it != _libraries.end(); ++it)
          libs.push_back(it->first);
    }
+
+   friend sanelli::memory;
 };
 
 } // namespace sanelli
