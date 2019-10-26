@@ -17,9 +17,9 @@ class shared_library
    std::string _name;
    std::string _platform_name;
    void *_native_handle;
-   shared_library(std::string name, std::string path);
-
+   
 protected:
+   shared_library(std::string name, std::string path);
    void *get_native_handler(std::string symbol);
 
 public:
@@ -67,7 +67,8 @@ public:
    {
       if (!has_library(library))
          load_library(library);
-      return std::dynamic_pointer_cast<TLibraryType>(_libraries[library]);
+      auto lib_pointer = _libraries[library];
+      return std::static_pointer_cast<TLibraryType>(lib_pointer);
    }
    void libraries(std::vector<std::string> &libs) const
    {
