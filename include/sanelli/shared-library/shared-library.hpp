@@ -67,7 +67,7 @@ public:
    {
       if (!has_library(library))
          load_library(library);
-      return _libraries[library];
+      return std::dynamic_pointer_cast<TLibraryType>(_libraries[library]);
    }
    void libraries(std::vector<std::string> &libs) const
    {
