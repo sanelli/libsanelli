@@ -12,3 +12,6 @@
 #include <sanelli/algorithm/algorithm.hpp>
 #include <sanelli/fuzzy/fuzzy.hpp>
 #include <sanelli/math/math.hpp>
+#include <sanelli/binary/binary.hpp>
+#include <sanelli/shared-library/shared-library.hpp>
+
