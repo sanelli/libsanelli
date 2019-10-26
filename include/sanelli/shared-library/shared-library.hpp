@@ -19,18 +19,8 @@ class shared_library
    void *_native_handle;
    shared_library(std::string name, std::string path);
 
-   void *get_native_handler(std::string symbol);
-
 protected:
-   template <typename TFunction>
-   inline std::function<TFunction> get_typed_handler(std::string name)
-   {
-      auto handler = get_native_handler(name);
-      if (handler == nullptr)
-         return nullptr;
-      auto symbol_pointer = (TFunction)handler;
-      return symbol_pointer;
-   }
+   void *get_native_handler(std::string symbol);
 
 public:
    ~shared_library();
