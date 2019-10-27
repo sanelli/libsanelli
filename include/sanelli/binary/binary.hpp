@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <type_traits>
+#include <stdexcept>
 
 namespace sanelli
 {
@@ -43,6 +44,19 @@ public:
          u.input[index] = input[start_at + index];
 
       return u.output;
+   }
+
+   template <typename TNumericType>
+   static TNumericType from_binary(char input[], size_t *start_at, size_t size = sizeof(TNumericType))
+   {
+      if (start_at == nullptr)
+         throw std::invalid_argument("start_at pointer cannot be null");
+
+      auto result = from_binary<TNumericType>(input, *start_at, size);
+
+      *start_at = *start_at + std::min(sizeof(TNumericType), size);
+
+      return result;
    }
 };
 
